@@ -94,6 +94,11 @@
         this.hasAuthorityPrefixUserPref = null;
     }
 
+    /*
+     * Export the decode function.
+	 */
+	Uri.decode = decode;
+
     /**
      * Define getter/setter methods
      */
