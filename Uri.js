@@ -32,8 +32,10 @@
      * @return {string}   decoded value
      */
     function decode(s) {
-        s = decodeURIComponent(s);
-        s = s.replace('+', ' ');
+		if (s) {
+			s = decodeURIComponent(s);
+			s = s.replace('+', ' ');
+		}
         return s;
     }
 
@@ -93,9 +95,9 @@
         this.queryPairs = parseQuery(this.uriParts.query);
         this.hasAuthorityPrefixUserPref = null;
     }
-
-    /*
-     * Export the decode function.
+	
+	/*
+	 * Export the decode function.
 	 */
 	Uri.decode = decode;
 
@@ -165,7 +167,7 @@
         for (i = 0; i < this.queryPairs.length; i++) {
             param = this.queryPairs[i];
             if (decode(key) === decode(param[0])) {
-                return param[1];
+                return decode(param[1]);
             }
         }
     };
@@ -181,7 +183,7 @@
         for (i = 0; i < this.queryPairs.length; i++) {
             param = this.queryPairs[i];
             if (decode(key) === decode(param[0])) {
-                arr.push(param[1]);
+                arr.push(decode(param[1]));
             }
         }
         return arr;
@@ -366,11 +368,16 @@
     };
 
     /**
-     * export via CommonJS, otherwise leak a global
+     * export via CommonJS or AMD, otherwise leak a global
      */
-    if (typeof module === 'undefined') {
-        global.Uri = Uri;
-    } else {
+    if (typeof module !== 'undefined') {
         module.exports = Uri;
+    } else if (typeof define === 'function' && define.amd) {
+        // Return the library as an AMD module:
+        define([], function() {
+            return Uri;
+        });
+    } else {
+        global.Uri = Uri;
     }
 }(this));
