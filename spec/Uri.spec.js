@@ -429,6 +429,13 @@ describe("Uri", function() {
         });
     });
 
+    describe("Additional exports", function() {
+        it('should export the decode function', function() {
+            expect(Uri.decode).toBeTruthy();
+    		expect(Uri.decode("f+s")).toEqual("f s");
+        });
+    });
+
     describe("Object cloning", function() {
         it('should be able to clone a separate copy which does not share state', function() {
             var a = new Uri('?a=1'),
